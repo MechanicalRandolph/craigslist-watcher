@@ -12,33 +12,51 @@ let baseDir  = FileManager.default.homeDirectoryForCurrentUser
 let seenFile = baseDir.appendingPathComponent("seen_posts.json")
 let logFile  = baseDir.appendingPathComponent("matches.log")
 
+// Note: Craigslist RSS only works reliably for lbg and dmg.
+// All other category feeds (jobs, computer gigs, writing, etc.) return HTTP 403.
 let feeds = [
     "https://albuquerque.craigslist.org/search/lbg?format=rss",  // labor gigs
     "https://albuquerque.craigslist.org/search/dmg?format=rss",  // domestic gigs
 ]
 
 let keywords: [String] = [
-    // tree
+    // tree / yard (physical gigs)
     "tree", "trees", "trim", "trimming", "prune", "pruning",
     "branch", "branches", "cottonwood", "stump",
-    // yard
     "yard", "lawn", "mow", "mowing", "weed", "weeds",
     "shrub", "shrubs", "leaf", "leaves", "grass",
     // hauling / junk
     "haul", "hauling", "junk", "removal", "debris",
-    "cleanout", "clean out", "cleanup", "clean up", "dump",
-    "trailer",
+    "cleanout", "clean out", "cleanup", "clean up", "dump", "trailer",
     // moving
     "mover", "movers", "moving", "furniture", "unload", "load boxes",
-    // handyman
+    // handyman / trades
     "handyman", "odd job", "odd-job", "assemble", "assembly",
     "mount", "mounting", "install", "repair",
-    // electrical
     "electrical", "outlet", "switch", "light fixture", "ceiling fan",
-    // plumbing
     "plumbing", "toilet", "faucet", "sink", "water line",
-    // general
+    // general labor
     "helper", "labor", "laborer", "general labor", "task", "tasks",
+    // CAD & drafting (Randolph's core skills — remote-compatible)
+    "cad", "drafting", "drafter", "solidworks", "autocad", "creo",
+    "mechanical design", "technical drawing", "technical documentation",
+    "gd&t", "geometric", "tolerancing", "design review", "drawing review",
+    "assembly drawing", "detail drawing", "engineering drawing",
+    // engineering / analysis
+    "mechanical engineer", "design engineer", "r&d", "research and development",
+    "ansys", "matlab", "finite element", "structural analysis", "thermal analysis",
+    "prototype", "testing", "product development",
+    // documentation & coordination (remote-compatible)
+    "technical writer", "technical writing", "documentation specialist",
+    "proposal writer", "proposal writing", "specifications", "spec writing",
+    "project coordinator", "project management", "engineering coordinator",
+    // design-adjacent (landscape, architecture, construction)
+    "landscape design", "landscape drafter", "site plan",
+    "architectural drafting", "construction document",
+    "revit", "sketchup", "autocad civil",
+    // remote/flexible signal words
+    "remote", "work from home", "wfh", "telecommute", "flexible hours",
+    "part time", "part-time", "nights", "weekends", "freelance", "contract",
 ]
 
 let excludes: [String] = [
