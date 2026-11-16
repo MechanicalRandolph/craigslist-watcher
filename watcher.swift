@@ -12,8 +12,8 @@ let baseDir  = FileManager.default.homeDirectoryForCurrentUser
 let seenFile = baseDir.appendingPathComponent("seen_posts.json")
 let logFile  = baseDir.appendingPathComponent("matches.log")
 
-// Note: Craigslist RSS only works reliably for lbg and dmg.
-// All other category feeds (jobs, computer gigs, writing, etc.) return HTTP 403.
+// Craigslist blocks automated requests to these feeds (HTTP 403), so a run
+// currently reports BLOCKED rather than finding posts.
 let feeds = [
     "https://albuquerque.craigslist.org/search/lbg?format=rss",  // labor gigs
     "https://albuquerque.craigslist.org/search/dmg?format=rss",  // domestic gigs
@@ -137,6 +137,8 @@ class FeedParser: NSObject, XMLParserDelegate {
     }
 }
 
+var blockedFeeds = 0
+
 func fetchFeed(_ urlStr: String) -> [[String: String]] {
     guard let url = URL(string: urlStr) else { return [] }
     var req = URLRequest(url: url, timeoutInterval: 15)
@@ -160,6 +162,7 @@ func fetchFeed(_ urlStr: String) -> [[String: String]] {
         if let preview = String(data: data.prefix(200), encoding: .utf8),
            preview.contains("blocked") {
             appendLog("BLOCKED by Craigslist on \(urlStr)")
+            blockedFeeds += 1
             return
         }
         let p = FeedParser()
@@ -212,4 +215,8 @@ for item in matched {
 let fmt = DateFormatter()
 fmt.dateStyle = .none; fmt.timeStyle = .short
 let ts = fmt.string(from: Date())
+if blockedFeeds > 0 {
+    print("\(ts) — BLOCKED by Craigslist on \(blockedFeeds) of \(feeds.count) feeds; nothing was checked")
+    if blockedFeeds == feeds.count { exit(1) }
+}
 print(matched.isEmpty ? "\(ts) — no new matches" : "\(ts) — \(matched.count) new match(es)")

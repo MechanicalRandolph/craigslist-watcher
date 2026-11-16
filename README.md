@@ -1,5 +1,10 @@
 # Craigslist Job Watcher — Albuquerque
 
+> **Status: not working.** Craigslist blocks automated requests to its RSS
+> feeds (HTTP 403), so this script currently cannot fetch any posts. Every run
+> reports `BLOCKED` and exits with an error. The setup steps below are kept for
+> reference, but installing the cron job will not find any listings.
+
 Monitors Craigslist labor and domestic gig listings every 30 minutes and fires a macOS notification the moment a new matching post appears. No paid services, no external dependencies, no browser required.
 
 Built for catching yard work, tree removal, hauling, handyman, electrical, and plumbing gigs before anyone else responds.
